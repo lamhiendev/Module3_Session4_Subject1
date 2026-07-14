@@ -18,4 +18,31 @@ public class EnrollmentRepository {
     public List<Enrollment> findAll() {
         return enrollments;
     }
+
+    public Enrollment findById(Long id) {
+        for (Enrollment enrollment : enrollments) {
+            if (enrollment.getId().equals(id)) {
+                return enrollment;
+            }
+        }
+        return null;
+    }
+
+    public void create(Enrollment enrollment) {
+        enrollments.add(enrollment);
+    }
+
+    public void update(Long id, Enrollment enrollment) {
+        for (Enrollment e : enrollments) {
+            if (e.getId().equals(id)) {
+                e.setStudentName(enrollment.getStudentName());
+                e.setCourseId(enrollment.getCourseId());
+                return;
+            }
+        }
+    }
+
+    public void deleteById(Long id) {
+        enrollments.removeIf(e -> e.getId().equals(id));
+    }
 }
