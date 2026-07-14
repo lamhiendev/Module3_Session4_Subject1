@@ -16,10 +16,11 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "title")
+    @Column(name = "title",nullable = false)
     private String title;
-    @Column(name = "status")
-    private String status;
-    @Column(name = "instructor_id")
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CourseStatus status;
+    @Column(name = "instructor_id", nullable = false)
     private Long instructorId;
 }
