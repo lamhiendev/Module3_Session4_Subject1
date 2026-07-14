@@ -6,7 +6,11 @@ plugins {
 
 group = 'com.github.hienlamdev'
 version = '0.0.1-SNAPSHOT'
+<<<<<<< HEAD
 description = 'Subject1'
+=======
+description = 'Module3_Session4_Subject1'
+>>>>>>> 2f7054f815e66497443519f53f3df9c88aab55d6
 
 java {
     toolchain {
