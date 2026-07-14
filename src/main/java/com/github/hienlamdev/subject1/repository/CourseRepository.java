@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CourseRepository {
@@ -19,29 +20,28 @@ public class CourseRepository {
         return courses;
     }
 
-    public Course findById(Long id) {
+    public Optional<Course> findById(Long id) {
         for (Course course : courses) {
             if (course.getId().equals(id)) {
-                return course;
+                return Optional.of(course);
             }
         }
-        return null;
+
+        return Optional.empty();
     }
     public void create(Course course) {
         courses.add(course);
     }
-    public void update(Long id, Course course) {
-        for(Course c : courses) {
-            if(c.getId().equals(id)) {
-                c.setInstructorId(course.getInstructorId());
-                c.setStatus(course.getStatus());
-                c.setTitle(course.getTitle());
-                return;
-            }
-        }
+    public Course update(Long id, Course course) {
+        Course existing = findById(id).orElseThrow(()-> new RuntimeException("Course not found"));
+        existing.setStatus(course.getStatus());
+        existing.setTitle(course.getTitle());
+        return existing;
     }
-    public void deleteById(Long id) {
-        courses.removeIf(c -> c.getId().equals(id));
+    public boolean deleteById(Long id) {
+        Course existing = findById(id).orElseThrow(()-> new RuntimeException("Course not found"));
+        courses.remove(existing);
+        return true;
     }
 }
 

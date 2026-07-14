@@ -45,29 +45,19 @@ public class CourseController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Course>> updateCourse(@PathVariable Long id, @RequestBody Course course) {
-        // 1. Kiểm tra xem Course có tồn tại không trước khi update
-        if (courseService.getCourseById(id) == null) {
-            return ResponseEntity.notFound().build(); // 404 Not Found
-        }
-        // 2. Thực hiện cập nhật
-        Course updatedCourse = courseService.updateCourse(id, course);
-        ApiResponse<Course> response = new ApiResponse<>(true, "Course updated successfully", updatedCourse);
-        return ResponseEntity.ok(response);
+       try {
+            return ResponseEntity.ok(new ApiResponse<>(true, "Course updated successfully", courseService.updateCourse(id, course)));
+       } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(new ApiResponse<>(false, e.getMessage(), null)); // 404 Not Found
+       }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Course>> deleteCourse(@PathVariable Long id) {
-        // 1. Kiểm tra xem Course có tồn tại không trước khi thực hiện xóa
-        Course courseToDelete = courseService.getCourseById(id);
-        if (courseToDelete == null) {
-            return ResponseEntity.notFound().build(); // 404 Not Found
+        try{
+            return ResponseEntity.ok(new ApiResponse<>(true, "Course deleted successfully", courseService.deleteCourseById(id)));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(new ApiResponse<>(false, e.getMessage(), null)); // 404 Not Found
         }
-
-        // 2. Tiến hành xóa
-        courseService.deleteCourseById(id);
-
-        // 3. Trả về thông tin của Course vừa bị xóa cho sạch nghiệp vụ
-        ApiResponse<Course> response = new ApiResponse<>(true, "Course deleted successfully", courseToDelete);
-        return ResponseEntity.ok(response);
     }
 }

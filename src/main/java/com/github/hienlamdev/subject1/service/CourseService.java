@@ -20,7 +20,7 @@ public class CourseService {
     }
 
     public Course getCourseById(Long id) {
-        return courseRepository.findById(id);
+        return courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
     }
 
     public Course createCourse(Course course) {
@@ -30,14 +30,12 @@ public class CourseService {
 
     public Course updateCourse(Long id, Course course) {
         courseRepository.update(id, course);
-        return courseRepository.findById(id);
+        return courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
     }
 
     public Course deleteCourseById(Long id) {
-        Course deleted = courseRepository.findById(id);
-        if (deleted != null) {
-            courseRepository.deleteById(id);
-        }
+        Course deleted = courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
+        courseRepository.deleteById(id);
         return deleted;
     }
 }
